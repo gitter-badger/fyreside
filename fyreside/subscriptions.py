@@ -3,7 +3,7 @@ import random
 
 
 import qtmud
-import fireside
+import fyreside
 
 
 def armor(player, amount=0):
@@ -27,8 +27,8 @@ def broadcast(channel, speaker, message):
 
 def client_mudlib_login_parser(client, line):
     qtmud.schedule('send', recipient=client,
-                   text=fireside.txt.SPLASH)
-    player = fireside.build_player(client)
+                   text=fyreside.txt.SPLASH)
+    player = fyreside.build_player(client)
     qtmud.active_services['talker'].tune_in(channel='one', client=player)
     player.input_parser = 'client_command_parser'
 
@@ -37,7 +37,7 @@ def client_disconnect(client):
     qtmud.log.debug('disconnecting {} from Fireside.'.format(client.name))
     if hasattr(client, 'hand'):
         qtmud.schedule('discard', player=client, all=True)
-    fireside.connected_players.remove(client)
+    fyreside.connected_players.remove(client)
     return True
 
 
@@ -55,7 +55,7 @@ def discard(player, cards=None, all=False):
         qtmud.log.debug('moving {} from {}\'s hand to the deck.'
                         ''.format(card.name, player.name))
         player.hand.remove(card)
-        fireside.DECK.append(card)
+        fyreside.DECK.append(card)
     return
 
 
@@ -74,11 +74,11 @@ def damage(player, amount=0):
 
 
 def draw(player, count=1):
-    random.shuffle(fireside.DECK)
+    random.shuffle(fyreside.DECK)
     drawn_cards = list()
     for c in range(count):
         try:
-            drawn_cards.append(fireside.DECK.pop())
+            drawn_cards.append(fyreside.DECK.pop())
         except Exception as err:
             qtmud.schedule('send', recipient=player,
                            text='The deck is empty! Wait for someone to play '
@@ -87,7 +87,7 @@ def draw(player, count=1):
         for card in drawn_cards:
             player.hand.append(card)
             card.owner = player
-            fireside.player_hands[player.name] = player.hand
+            fyreside.player_hands[player.name] = player.hand
         qtmud.schedule('send', recipient=player,
                        text='Drew {} card[s]'.format(', '.join([c.name for c in
                                                                 drawn_cards])))

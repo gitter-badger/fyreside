@@ -1,5 +1,5 @@
 import qtmud
-import fireside
+import fyreside
 
 
 def deck(player, *, H=False, h=False):
@@ -18,13 +18,13 @@ def deck(player, *, H=False, h=False):
     if h:
         output += brief
     else:
-        output += 'There are {} in the deck.'.format(len(fireside.DECK))
+        output += 'There are {} in the deck.'.format(len(fyreside.DECK))
     if output:
         qtmud.schedule('send', recipient=player, text=output)
 
 
 def draw(player, *, H=False, h=False):
-    """ Draws a card from :attr:`fireside.DECK` into the player's hand.
+    """ Draws a card from :attr:`fyreside.DECK` into the player's hand.
 
         :param player:      The player issuing the command. (That'd be you.)
                             *This isn't part of the command you enter.*
@@ -87,7 +87,7 @@ def info(player, card, *, H=False, h=False):
     if h:
         output += brief
     else:
-        cards = fireside.search_hand(player, card)
+        cards = fyreside.search_hand(player, card)
         if len(cards) == 1:
             card = cards[0]
             output += ('--- {card.name} ---\n'
@@ -128,7 +128,7 @@ def play(player, card, *, H=False, h=False, target=''):
     if h:
         output += brief
     else:
-        cards = fireside.search_hand(player, card)
+        cards = fyreside.search_hand(player, card)
         if len(cards) == 1:
             valid = True
             card = cards[0]
@@ -136,7 +136,7 @@ def play(player, card, *, H=False, h=False, target=''):
             if target in ['me', 'self']:
                 targets = [player]
             else:
-                targets = fireside.search_connected_players_by_name(target)
+                targets = fyreside.search_connected_players_by_name(target)
             if hasattr(card, 'needs_target') and len(targets) <= 0:
                 output += '...needs a target, didn\'t get one... '
                 valid = False
@@ -157,7 +157,7 @@ def play(player, card, *, H=False, h=False, target=''):
                        ''.format(card.cost, player.mana))
             output += ('shuffling {} back into the deck... '.format(card.name))
             player.hand.remove(card)
-            fireside.DECK.append(card)
+            fyreside.DECK.append(card)
             player.history.append(card.name)
     if output:
         qtmud.schedule('send', recipient=player, text=output)
