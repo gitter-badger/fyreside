@@ -9,8 +9,8 @@ import sys
 import logging
 
 if __name__ == '__main__':
-    conf_locations = ['./fireside.conf', './.fireside.conf', '~/fireside.conf',
-                      '~/.fireside.conf']
+    conf_locations = ['./fyreside.conf', './.fyreside.conf', '~/fyreside.conf',
+                      '~/.fyreside.conf']
     count = 0
     conf_file = None
     config = configparser.ConfigParser()
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     parser.add_argument('--qtmud')
     parser.add_argument('--conf',
                         help=('config file to use, example: '
-                              'qtmud_run --conf fireside.conf'))
+                              'qtmud_run --conf fyreside.conf'))
 
     args = parser.parse_args()
     if args.qtmud:
@@ -59,13 +59,13 @@ if __name__ == '__main__':
     if args.mudlib:
         sys.path.append(args.mudlib)
     try:
-        import fireside
-        qtmud.MUDLIB = fireside
+        import fyreside
+        qtmud.MUDLIB = fyreside
     except Exception as err:
-        print('failed to import fireside: %s', err)
+        print('failed to import fyreside: %s', err)
         raise SystemExit
     if qtmud.load():
-        if fireside.load():
+        if fyreside.load():
             if qtmud.start():
                 qtmud.run()
 

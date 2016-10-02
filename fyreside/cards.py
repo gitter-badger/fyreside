@@ -2,7 +2,7 @@ import random
 
 
 import qtmud
-import fireside
+import fyreside
 
 
 # todo: player accounts
@@ -44,7 +44,7 @@ class ConvenientPortal(Card):
                            text='{} steals your {}!'.format(player.name,
                                                             card.name))
         else:
-            card = random.choice(fireside.DECK)
+            card = random.choice(fyreside.DECK)
             card.cost += -2
             player.hand.append(card)
             qtmud.schedule('send', recipient=player,
@@ -214,20 +214,6 @@ class Grunt(Card):
                        text=('Your Grunt boosts your armor by {}'
                              ''.format(self.stats['armor'])))
 
-class Neckbeard(Card):
-    def __init__(self):
-        super(Neckbeard, self).__init__()
-        self.name = 'Neckbeard'
-        self.owner = None
-        self.rarity = 2
-        self.cost = 3
-        self.ability = ('Shows how much mana every player has.')
-
-    def play(self, player, target):
-        players = [p for p in fireside.connected_players]
-        qtmud.schedule('send', recipient=player,
-                       text=output)
-
 
 class Pablo(Card):
     """ Pablo costs 7 mana, and adds 2 points to every player's armor -
@@ -244,7 +230,7 @@ class Pablo(Card):
                         ''.format(self.stats['armor']))
 
     def play(self, player, target):
-        players = fireside.connected_players
+        players = fyreside.connected_players
         if len(players) == 1:
             qtmud.schedule('send', recipient=player,
                            text=('You\'re the only player, so Pablo chills '
@@ -314,7 +300,7 @@ class ScoutBalloon(Card):
 
     def play(self, player, target):
         reports = list()
-        for target in fireside.connected_players:
+        for target in fyreside.connected_players:
             hand_string = ', '.join([c.name for c in target.hand])
             reports.append('{target.name} has {target.health} health, '
                           '{target.armor} armor, {target.mana} mana, '
