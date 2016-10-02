@@ -1,3 +1,7 @@
+# Fyreside Log/Data Dirs
+data/
+logs/
+
 # PyCharm
 .idea
 
