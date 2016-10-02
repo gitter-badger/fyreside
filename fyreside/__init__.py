@@ -5,7 +5,7 @@ from inspect import getmembers, isfunction, isclass
 import qtmud
 import qtmud.subscriptions
 
-from fireside import cards, cmds, services, subscriptions, txt
+from fyreside import cards, cmds, services, subscriptions, txt
 
 connected_players = list()
 """ The currently connected players. """
@@ -13,7 +13,7 @@ player_hands = dict()
 """ All the hands currently held by different players, in the format of
 ``{ player : [ list, of, cards ] }``"""
 DECK = list()
-""" built from the classes in :mod:`fireside.cards` when :func:`load` is
+""" built from the classes in :mod:`fyreside.cards` when :func:`load` is
 called. """
 
 
@@ -32,7 +32,7 @@ def build_player(client):
     | mana       | int  | increased by talking, decreased by playing cards.    |
     +------------+------+------------------------------------------------------+
     | health     | int  | if this reaches 0, the player                        |
-    |            |      | :func:`dies <fireside.subscriptions.death>`.         |
+    |            |      | :func:`dies <fyreside.subscriptions.death>`.         |
     +------------+------+------------------------------------------------------+
     | armor      | int  | additional protection from damage.                   |
     +------------+------+------------------------------------------------------+
@@ -41,7 +41,7 @@ def build_player(client):
     """
     for cmd, func in [m for m in getmembers(cmds) if isfunction(m[1])]:
         client.commands[cmd] = types.MethodType(func, client)
-    qtmud.active_services['talker'].tune_in(channel='fireside', client=client)
+    qtmud.active_services['talker'].tune_in(channel='fyreside', client=client)
     connected_players.append(client)
     client.max_hand = 7
     client.max_health = 20
@@ -78,19 +78,19 @@ def search_hand(player, text):
 
 
 def load():
-    """ Adds Fireside :mod:`subscriptions <fireside.subscriptions>` to
+    """ Adds Fyreside :mod:`subscriptions <fyreside.subscriptions>` to
     :attr:`qtmud.active_subscribers` and builds :attr:`DECK` from the classes
-    in :mod:`fireside.cards`.
+    in :mod:`fyreside.cards`.
     """
     global DECK
-    qtmud.log.info('load()ing Fireside')
-    qtmud.log.info('adding fireside.subscriptions to qtmud.subscribers')
+    qtmud.log.info('load()ing Fyreside')
+    qtmud.log.info('adding fyreside.subscriptions to qtmud.subscribers')
     for s in getmembers(subscriptions):
         if isfunction(s[1]):
             if not s[1].__name__ in qtmud.subscribers:
                 qtmud.subscribers[s[1].__name__] = list()
             qtmud.subscribers[s[1].__name__].append(s[1])
-    qtmud.active_services['talker'].new_channel('fireside')
+    qtmud.active_services['talker'].new_channel('fyreside')
     for card in [c[1]() for c in getmembers(cards) if isclass(c[1])]:
         for _ in range(card.rarity):
             DECK.append(card.__class__())
